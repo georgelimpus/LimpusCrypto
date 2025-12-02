@@ -21,7 +21,8 @@ struct HomeView: View {
             VStack {
                 homeHeader
                 
-                columnTitles 
+                SearchBarView(searchText: $vm.searchText)
+                columnTitles
                 
                 if !showPortfolio {
                     allCoinsList
@@ -108,3 +109,4 @@ extension HomeView {
     }
     
 }
+ 
