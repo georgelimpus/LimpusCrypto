@@ -1,0 +1,163 @@
+//
+//  PortfolioView.swift
+//  LimpusCrypto
+//
+//  Created by George Limpus on 11/12/2025.
+//
+
+import SwiftUI
+
+struct PortfolioView: View {
+    
+    @Environment(\.presentationMode) var presentationMode
+    @State private var selectedCoin: CoinModel? = nil
+    @State private var quantityText: String = ""
+    @State private var showCheckmark: Bool = false
+    
+    @EnvironmentObject private var vm: HomeViewModel
+    
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStackLayout(alignment: .leading, spacing: 0) {
+                    SearchBarView(searchText: $vm.searchText)
+                    coinLogoList
+                    
+                    if selectedCoin != nil {
+                        portfolioInputSection
+                    }
+                }
+            }
+            .navigationTitle(Text("Edit Portfolio"))
+            .toolbar(content: {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    XMarkButton()
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    trailingNavBarButtons
+                }
+            })
+        }
+    }
+}
+
+#Preview {
+    PortfolioView()
+        .environmentObject(dev.homeVM)
+}
+
+extension PortfolioView  {
+    
+    private var coinLogoList: some View {
+        
+        ScrollView(.horizontal, showsIndicators: false, content: {
+            LazyHStack(spacing: 10) {
+                ForEach(vm.allCoins) { coin in
+                    CoinLogoView(coin: coin)
+                        .frame(width: 75)
+                        .padding(4)
+                        .onTapGesture {
+                            withAnimation(.easeIn) {
+                                selectedCoin = coin
+                            }
+                        }
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke( selectedCoin?.id == coin.id ? Color.theme.green : Color.clear
+                                        , lineWidth: 1)
+                        )
+                }
+            }
+            .frame(height: 120)
+            .padding(.leading)
+        })
+    }
+    
+    private func getCurrentValue() -> Double {
+        
+        if let quantity = Double(quantityText) {
+             return quantity * (selectedCoin?.currentPrice ?? 0)
+        }
+        return 0
+    }
+    
+    private var portfolioInputSection: some View {
+        
+        VStack(spacing: 20) {
+            HStack{
+                Text("Current price of \(selectedCoin?.symbol.uppercased() ?? ""):")
+                     Spacer()
+                     Text(selectedCoin?.currentPrice.asCurrencywith6Decimals() ?? "")
+                    
+            }
+            Divider()
+            HStack {
+                Text("Amount holding:")
+                Spacer()
+                TextField("Ex: 1.4", text: $quantityText)
+                    .multilineTextAlignment(.trailing)
+                    .keyboardType(.decimalPad)
+                
+            }
+            Divider()
+            HStack {
+                Text("Current Value:")
+                Spacer()
+                Text(getCurrentValue().asCurrencywith2Decimals())
+            }
+             
+        }
+        .animation(.none)
+        .padding()
+        .font(.headline)
+    }
+    
+    private var trailingNavBarButtons: some View {
+        
+        HStack(spacing: 10) {
+            Image(systemName: "checkmark")
+                .opacity(showCheckmark ? 1.0 : 0.0)
+            
+            Button(action: {
+                saveButtonPressed()
+            }, label: {
+                Text("Save".uppercased())
+            })
+            .opacity(
+                (selectedCoin != nil && selectedCoin?.currentHoldings != Double(quantityText)) ?
+                1.0 : 0.0
+            )
+        }
+        .font(.headline)
+    }
+    
+    private func saveButtonPressed() {
+        
+        guard let coin = selectedCoin else { return }
+        
+        //save to portfolio
+        
+        //show checkmark
+        
+        withAnimation(.easeIn){
+            showCheckmark = true
+            removeSelectedCoin()
+        }
+        
+        //hide keyboard
+        
+        UIApplication.shared.endEditing()
+        
+        //hide checkmark
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            withAnimation(.easeOut) {
+                showCheckmark = false
+            }
+        }
+    }
+    
+    private func removeSelectedCoin() {
+        selectedCoin = nil
+        vm.searchText = ""
+    }
+}
