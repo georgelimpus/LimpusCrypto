@@ -1,0 +1,106 @@
+## ----------------------------------------------------------------------
+## Xcode
+## ----------------------------------------------------------------------
+
+# Build products
+build/
+DerivedData/
+
+# Xcode workspace & settings
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+*.xcuserstate
+
+# Xcode generated
+*.moved-aside
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# iOS/macOS device logs
+*.mobileprovision
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## ----------------------------------------------------------------------
+## Swift & Swift Package Manager (SPM)
+## ----------------------------------------------------------------------
+
+# SPM build artifacts
+.swiftpm/
+.build/
+
+# Xcode integration
+Package.resolved
+
+## ----------------------------------------------------------------------
+## CocoaPods
+## ----------------------------------------------------------------------
+
+# Pod directory
+Pods/
+
+# Pod-related artifacts
+*.xcworkspace
+podfile.lock
+
+## ----------------------------------------------------------------------
+## Carthage
+## ----------------------------------------------------------------------
+
+Carthage/Build/
+
+## ----------------------------------------------------------------------
+## Fastlane
+## ----------------------------------------------------------------------
+
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+
+## ----------------------------------------------------------------------
+## General macOS exclusions
+## ----------------------------------------------------------------------
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Spotlight
+.Spotlight-V100
+.Trashes
+
+# Finder metadata
+._*
+
+# Image cache
+*.icloud
+
+## ----------------------------------------------------------------------
+## SwiftUI Previews
+## ----------------------------------------------------------------------
+
+# Previews cache
+*.preview-thumbnails
+*.swiftpm/xcode/xcuserdata/
+
+## ----------------------------------------------------------------------
+## Misc
+## ----------------------------------------------------------------------
+
+# Temporary files
+*.swp
+*.tmp
+*.lock
+
+# Logs
+*.log
+
+# Environment / secrets
+.env
+.env.*
+Secrets.xcconfig
