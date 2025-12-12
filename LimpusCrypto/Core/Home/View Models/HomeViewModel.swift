@@ -18,7 +18,7 @@ class HomeViewModel: ObservableObject {
     
     private let coinDataService = CoinDataService()
     private let marketDataService = MarketDataService()
-    private let portfolioDateService = PortfolioDataService()
+    private let portfolioDataService = PortfolioDataService()
     private var cancellables: Set<AnyCancellable> = []
     
     init(){
@@ -39,7 +39,7 @@ class HomeViewModel: ObservableObject {
         
         //updates portfolioCoins
         $allCoins
-            .combineLatest(portfolioDateService.$savedEntities)
+            .combineLatest(portfolioDataService.$savedEntities)
             .map { (CoinModels, portfolioEntities) -> [CoinModel] in
                 
                 CoinModels
@@ -68,7 +68,7 @@ class HomeViewModel: ObservableObject {
     
     
     func updatePortfolio(coin: CoinModel, amount: Double) {
-        portfolioDateService.updatePortfolio(coin: coin, amount: amount)
+        portfolioDataService.updatePortfolio(coin: coin, amount: amount)
     }
     
     private func filterCoins(text: String, coins: [CoinModel]) -> [CoinModel] {
